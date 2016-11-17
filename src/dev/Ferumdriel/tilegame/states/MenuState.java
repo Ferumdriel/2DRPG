@@ -1,6 +1,7 @@
 package dev.Ferumdriel.tilegame.states;
 
 import dev.Ferumdriel.tilegame.Main.Game;
+import dev.Ferumdriel.tilegame.Main.Handler;
 
 import java.awt.*;
 
@@ -9,8 +10,8 @@ import java.awt.*;
  */
 public class MenuState extends State{
 
-    public MenuState(Game game){
-        super(game);
+    public MenuState(Handler handler){
+        super(handler);
     }
 
     @Override

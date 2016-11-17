@@ -1,6 +1,7 @@
 package dev.Ferumdriel.tilegame.entities;
 
 import dev.Ferumdriel.tilegame.Main.Game;
+import dev.Ferumdriel.tilegame.Main.Handler;
 
 import java.awt.*;
 
@@ -8,12 +9,12 @@ import java.awt.*;
  * Created by Binio on 2016-10-12.
  */
 public abstract class Entity {
-    protected Game game;
+    protected Handler handler;
     protected float x, y;
     protected int width, height;
 
-    public Entity(Game game, float x, float y, int width, int height){
-        this.game = game;
+    public Entity(Handler handler, float x, float y, int width, int height){
+        this.handler = handler;
         this.x = x;
         this.y = y;
         this.width = width;

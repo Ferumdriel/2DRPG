@@ -18,7 +18,7 @@ public class Handler {
 
     //GETTERS AND SETTERS
 
-    public GameCamera getCamera(){
+    public GameCamera getGameCamera(){
         return game.getGameCamera();
     }
 

@@ -1,6 +1,7 @@
 package dev.Ferumdriel.tilegame.states;
 
 import dev.Ferumdriel.tilegame.Main.Game;
+import dev.Ferumdriel.tilegame.Main.Handler;
 
 import java.awt.*;
 
@@ -19,12 +20,13 @@ public abstract class State {
         return currentState;
     }
 
-    protected Game game;
-
-    public State(Game game){
-        this.game = game;
-    }
     //CLASS
+    protected Handler handler;
+
+    public State(Handler handler){
+        this.handler = handler;
+    }
+
     public abstract void tick(); //tick of every state
 
     public abstract void render(Graphics g);
