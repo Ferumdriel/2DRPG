@@ -13,7 +13,7 @@ public class Assets {
     public static BufferedImage player, dirt, grass, stone, tree;
 
     public static void init(){
-        SpriteSheet sheet = new SpriteSheet(ImageLoader.loadImage("/textures/sheet.png"));
+        SpriteSheet sheet = new SpriteSheet(ImageLoader.loadImage("/textures/sheet2.png"));
 
         player = sheet.crop(0,0,width, height);
         dirt = sheet.crop(width,0,width, height);
