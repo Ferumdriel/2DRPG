@@ -3,6 +3,7 @@ package dev.Ferumdriel.tilegame.entities.creatures;
 import dev.Ferumdriel.tilegame.Main.Game;
 import dev.Ferumdriel.tilegame.Main.Handler;
 import dev.Ferumdriel.tilegame.entities.Entity;
+import dev.Ferumdriel.tilegame.tiles.Tile;
 
 import java.awt.*;
 
@@ -30,8 +31,53 @@ public abstract class Creature extends Entity{
     }
 
     public void move(){
-        x += xMove;
-        y += yMove;
+        moveX();
+        moveY();
+    }
+
+    public void moveX(){
+        if(xMove > 0){ //moving right
+            int tx = (int) (x + xMove + bounds.x + bounds.width) / Tile.TILEWIDTH;
+            if(!collisionWithTile(tx, (int) (y + bounds.y) / Tile.TILEHEIGHT) &&
+                    !collisionWithTile(tx, (int) (y + bounds.y + bounds.height) / Tile.TILEHEIGHT)){
+                x += xMove;
+            }else{ //if there's collision
+                x = tx * Tile.TILEWIDTH - bounds.x - bounds.width - 1; //-1 so we will be able to move up and down near collision
+            }
+        }else if (xMove < 0){ //moving left
+            int tx = (int) (x + xMove + bounds.x) / Tile.TILEWIDTH;
+            if(!collisionWithTile(tx, (int) (y + bounds.y) / Tile.TILEHEIGHT) &&
+                    !collisionWithTile(tx, (int) (y + bounds.y + bounds.height) / Tile.TILEHEIGHT)){
+                x += xMove;
+            }else{
+                x = tx * Tile.TILEWIDTH + Tile.TILEWIDTH - bounds.x;
+            }
+        }
+
+    }
+
+    public void moveY(){
+        if(yMove < 0){
+            int ty = (int) (y + yMove + bounds.y) / Tile.TILEHEIGHT;
+
+            if(!collisionWithTile((int) (x + bounds.x) / Tile.TILEWIDTH, ty) && !collisionWithTile((int) (x + bounds.x + bounds.width) / Tile.TILEWIDTH, ty)){
+                y += yMove;
+            }else{
+                y = ty * Tile.TILEHEIGHT + Tile.TILEHEIGHT - bounds.y;
+            }
+        }else if(yMove > 0){
+            int ty = (int) (y + yMove + bounds.y + bounds.height) / Tile.TILEHEIGHT;
+
+            if(!collisionWithTile((int) (x + bounds.x) / Tile.TILEWIDTH, ty) && !collisionWithTile((int) (x + bounds.x + bounds.width) / Tile.TILEWIDTH, ty)){
+                y += yMove;
+            }else{
+                y = ty * Tile.TILEHEIGHT - bounds.y - bounds.height - 1; //doesn't look perfect
+            }
+        }
+    }
+
+    protected boolean collisionWithTile(int x, int y){
+        return handler.getWorld().getTile(x,y).isSolid();
     }
 
  /** GETTERS AND SETTERS **/
