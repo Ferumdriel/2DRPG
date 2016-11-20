@@ -34,7 +34,7 @@ public class Player extends Creature {
     @Override
     public void tick() {
         //Animations
-        animDown.tick();
+        animationTick();
         //Movement
         getInput();
         move();
@@ -60,6 +60,18 @@ public class Player extends Creature {
 //                    (int)(y + bounds.y - handler.getGameCamera().getyOffset()),
 //                    bounds.width, bounds.height);
 
+    }
+
+    private void animationTick(){
+        if (xMove < 0) {
+            animLeft.tick();
+        } else if (xMove > 0) {
+            animRight.tick();
+        } else if (yMove < 0) {
+            animUp.tick();
+        } else {
+            animDown.tick();
+        }
     }
 
     private BufferedImage getCurrentAnimationFrame() {
