@@ -1,6 +1,9 @@
 package dev.Ferumdriel.tilegame.worlds;
 
 import dev.Ferumdriel.tilegame.Main.Handler;
+import dev.Ferumdriel.tilegame.entities.creatures.Player;
+import dev.Ferumdriel.tilegame.entities.statics.EntityManager;
+import dev.Ferumdriel.tilegame.entities.statics.Tree;
 import dev.Ferumdriel.tilegame.tiles.Tile;
 import utils.Utils;
 
@@ -15,14 +18,25 @@ public class World {
     private int width, height;
     private int spawnX, spawnY;
     private int[][] tiles;
+    //Entitties
+    private EntityManager entityManager;
 
     public World(Handler handler, String path) {
         this.handler = handler;
+        entityManager = new EntityManager(handler, new Player(handler, 100, 100));
+        entityManager.addEntity(new Tree(handler, 100, 250));
+        entityManager.addEntity(new Tree(handler, 100, 350));
+        entityManager.addEntity(new Tree(handler, 100, 450));
+        entityManager.addEntity(new Tree(handler, 100, 550));
+
         loadWorld(path);
+
+        entityManager.getPlayer().setX(spawnX);
+        entityManager.getPlayer().setY(spawnY);
     }
 
     public void tick() {
-        //TODO
+        entityManager.tick();
     }
 
     public void render(Graphics g) {
@@ -39,6 +53,8 @@ public class World {
                 getTile(x, y).render(g, (int) (x * Tile.TILEWIDTH - handler.getGameCamera().getxOffset()), (int) (y * Tile.TILEHEIGHT - handler.getGameCamera().getyOffset()));
             }
         }
+        //Entitties
+        entityManager.render(g);
     }
 
     public Tile getTile(int x, int y) {
@@ -68,6 +84,10 @@ public class World {
                 tiles[x][y] = Utils.parseInt(tokens[(x + y * width) + 4]);
             }
         }
+    }
+
+    public EntityManager getEntityManager() {
+        return entityManager;
     }
 
     public int getWidth(){
