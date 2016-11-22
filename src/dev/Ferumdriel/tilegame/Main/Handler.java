@@ -2,6 +2,7 @@ package dev.Ferumdriel.tilegame.Main;
 
 import dev.Ferumdriel.tilegame.gfx.GameCamera;
 import dev.Ferumdriel.tilegame.input.KeyManager;
+import dev.Ferumdriel.tilegame.input.MouseManager;
 import dev.Ferumdriel.tilegame.worlds.World;
 
 /**
@@ -24,6 +25,10 @@ public class Handler {
 
     public KeyManager getKeyManager(){
         return game.getKeyManager();
+    }
+
+    public MouseManager getMouseManager(){
+        return game.getMouseManager();
     }
 
     public int getWidth(){
