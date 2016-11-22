@@ -2,6 +2,7 @@ package dev.Ferumdriel.tilegame.entities.creatures;
 
 import dev.Ferumdriel.tilegame.Main.Game;
 import dev.Ferumdriel.tilegame.Main.Handler;
+import dev.Ferumdriel.tilegame.entities.Entity;
 import dev.Ferumdriel.tilegame.gfx.Animation;
 import dev.Ferumdriel.tilegame.gfx.Assets;
 
@@ -15,6 +16,8 @@ public class Player extends Creature {
 
     //Animations
     private Animation animDown, animUp, animLeft, animRight;
+    //Attack timer
+    private long lastAttackTimer, attackCooldown = 800, attackTimer = attackCooldown;
 
     public Player(Handler handler, float x, float y) {
         super(handler, x, y, Creature.DEFAULT_CREATURE_WIDTH, Creature.DEFAULT_CREATURE_HEIGHT);
@@ -39,16 +42,73 @@ public class Player extends Creature {
         getInput();
         move();
         handler.getGameCamera().centerOnEntity(this);
+        //Attack
+        checkAttacks();
     }
 
-    private void getInput(){
+    private void checkAttacks() {
+        attackTimer += System.currentTimeMillis() - lastAttackTimer;
+        lastAttackTimer = System.currentTimeMillis();
+        if(attackTimer < attackCooldown){
+            return;
+        }
+        Rectangle cb = getCollisionBounds(0, 0);
+        Rectangle ar = new Rectangle(); //attack rectangle
+        int arSize = 20;
+        ar.width = arSize;
+        ar.height = arSize;
+
+        if (handler.getKeyManager().aUp) {
+            ar.x = cb.x + cb.width /2 - arSize / 2;
+            ar.y = cb.y - arSize;
+        }else if (handler.getKeyManager().aDown){
+            ar.x = cb.x + cb.width /2 - arSize / 2;
+            ar.y = cb.y + cb.height;
+        }else if (handler.getKeyManager().aLeft){
+            ar.x = cb.x - arSize;
+            ar.y = cb.y + cb.height - arSize / 2;
+        }else if (handler.getKeyManager().aRight){
+            ar.x = cb.x + cb.width;
+            ar.y = cb.y + cb.height / 2 - arSize / 2;
+        }else{
+            return;
+        }
+
+        attackTimer = 0; //entity is going to attack so we reset it
+
+        for(Entity e: handler.getWorld().getEntityManager().getEntitties()){
+            if(e.equals(this)){
+                continue;
+            }
+            if(e.getCollisionBounds(0,0).intersects(ar)){
+                e.hurt(1);
+                return;
+            }
+
+        }
+    }
+
+    @Override
+    public void die() {
+        System.out.println("You lose");
+    }
+
+    private void getInput() {
         xMove = 0;
         yMove = 0;
 
-        if(handler.getKeyManager().up) { yMove = -speed; } //y axis is moving from the top to the bottom
-        if(handler.getKeyManager().down) { yMove = speed; }
-        if(handler.getKeyManager().left) { xMove = -speed; }
-        if(handler.getKeyManager().right) { xMove = speed; }
+        if (handler.getKeyManager().up) {
+            yMove = -speed;
+        } //y axis is moving from the top to the bottom
+        if (handler.getKeyManager().down) {
+            yMove = speed;
+        }
+        if (handler.getKeyManager().left) {
+            xMove = -speed;
+        }
+        if (handler.getKeyManager().right) {
+            xMove = speed;
+        }
     }
 
     @Override
@@ -62,7 +122,7 @@ public class Player extends Creature {
 
     }
 
-    private void animationTick(){
+    private void animationTick() {
         if (xMove < 0) {
             animLeft.tick();
         } else if (xMove > 0) {

@@ -18,4 +18,10 @@ public class Tree extends StaticEntity {
     }
 
 
+    @Override
+    public void die(){
+
+    }
+
+
 }
