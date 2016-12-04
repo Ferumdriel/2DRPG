@@ -7,6 +7,7 @@ import dev.Ferumdriel.tilegame.entities.creatures.Player;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Iterator;
 
 /**
  * Created by Binio on 2016-11-21.
@@ -36,11 +37,12 @@ public class EntityManager {
     }
 
     public void tick(){
-        for(int i = 0; i < entitties.size(); i++){
-            Entity e = entitties.get(i);
+        Iterator<Entity> it = entitties.iterator();
+        while(it.hasNext()){
+            Entity e = it.next();
             e.tick();
             if(!e.isActive()){
-                entitties.remove(e);
+                it.remove();
             }
         }
         entitties.sort(renderSorter);

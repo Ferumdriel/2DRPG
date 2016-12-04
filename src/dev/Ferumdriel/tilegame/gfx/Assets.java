@@ -10,12 +10,16 @@ import java.awt.image.BufferedImage;
 public class Assets {
 
     private static final int height = 32, width = 32;
-    public static BufferedImage dirt, grass, stone, tree;
+    public static BufferedImage dirt, grass, stone, tree, rock;
+    public static BufferedImage wood;
     public static BufferedImage[] player_down, player_up, player_right, player_left;
     public static BufferedImage[] btn_start;
 
     public static void init(){
         SpriteSheet sheet = new SpriteSheet(ImageLoader.loadImage("/textures/sheet.png"));
+
+        wood = sheet.crop(0, height, width, height);
+        rock = sheet.crop(width * 3,0,width, height); //same as stone
 
         btn_start = new BufferedImage[2];
         btn_start[0] = sheet.crop(0, height * 3, width * 2, height);

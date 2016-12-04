@@ -3,7 +3,9 @@ package dev.Ferumdriel.tilegame.worlds;
 import dev.Ferumdriel.tilegame.Main.Handler;
 import dev.Ferumdriel.tilegame.entities.creatures.Player;
 import dev.Ferumdriel.tilegame.entities.statics.EntityManager;
+import dev.Ferumdriel.tilegame.entities.statics.Rock;
 import dev.Ferumdriel.tilegame.entities.statics.Tree;
+import dev.Ferumdriel.tilegame.items.ItemManager;
 import dev.Ferumdriel.tilegame.tiles.Tile;
 import utils.Utils;
 
@@ -20,14 +22,19 @@ public class World {
     private int[][] tiles;
     //Entitties
     private EntityManager entityManager;
+    //Item
+    private ItemManager itemManager;
 
     public World(Handler handler, String path) {
         this.handler = handler;
         entityManager = new EntityManager(handler, new Player(handler, 100, 100));
+        itemManager = new ItemManager(handler);
+        //Temporary entity code
         entityManager.addEntity(new Tree(handler, 100, 250));
         entityManager.addEntity(new Tree(handler, 100, 350));
         entityManager.addEntity(new Tree(handler, 100, 450));
         entityManager.addEntity(new Tree(handler, 100, 550));
+        entityManager.addEntity(new Rock(handler, 100, 650));
 
         loadWorld(path);
 
@@ -36,6 +43,7 @@ public class World {
     }
 
     public void tick() {
+        itemManager.tick();
         entityManager.tick();
     }
 
@@ -53,6 +61,9 @@ public class World {
                 getTile(x, y).render(g, (int) (x * Tile.TILEWIDTH - handler.getGameCamera().getxOffset()), (int) (y * Tile.TILEHEIGHT - handler.getGameCamera().getyOffset()));
             }
         }
+
+        //Items
+        itemManager.render(g);
         //Entitties
         entityManager.render(g);
     }
@@ -84,6 +95,14 @@ public class World {
                 tiles[x][y] = Utils.parseInt(tokens[(x + y * width) + 4]);
             }
         }
+    }
+
+    public Handler getHandler() {
+        return handler;
+    }
+
+    public ItemManager getItemManager() {
+        return itemManager;
     }
 
     public EntityManager getEntityManager() {
