@@ -19,14 +19,17 @@ public class Item {
 
     // CLASS
 
-    public static final int ITEMWIDTH = 32, ITEMHEIGHT = 32, PICKED_UP = -1;
+    public static final int ITEMWIDTH = 32, ITEMHEIGHT = 32;
 
     protected Handler handler;
     protected BufferedImage texture;
     protected String name;
     protected final int id;
 
+    protected Rectangle bounds;
+
     protected int x, y, count;
+    protected boolean pickedUp = false;
 
     public Item(BufferedImage texture, String name, int id){
         this.texture = texture;
@@ -34,10 +37,16 @@ public class Item {
         this.id = id;
         count = 1;
 
+        bounds = new Rectangle(x, y, ITEMWIDTH, ITEMHEIGHT);
+
         items[id] = this;
     }
 
     public void tick(){
+        if(handler.getWorld().getEntityManager().getPlayer().getCollisionBounds(0f,0f).intersects(bounds)){
+            pickedUp = true;
+            handler.getWorld().getEntityManager().getPlayer().getInventory().addItem(this);
+        }
     }
 
     //Item is in the world
@@ -62,6 +71,8 @@ public class Item {
     public void setPosition(int x, int y){
         this.x = x;
         this.y = y;
+        bounds.x = x;
+        bounds.y = y;
     }
 
     //GETTERS AND SETTERS
@@ -100,5 +111,21 @@ public class Item {
 
     public void setCount(int count) {
         this.count = count;
+    }
+
+    public boolean isPickedUp() {
+        return pickedUp;
+    }
+
+    public void setPickedUp(boolean pickedUp) {
+        this.pickedUp = pickedUp;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
